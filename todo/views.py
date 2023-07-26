@@ -34,9 +34,7 @@ class TagListView(LoginRequiredMixin, generic.ListView):
 
         name = self.request.GET.get("name", "")
 
-        context["search_form"] = TagSearchForm(
-            initial={"name": name}
-        )
+        context["search_form"] = TagSearchForm(initial={"name": name})
 
         return context
 
@@ -46,9 +44,7 @@ class TagListView(LoginRequiredMixin, generic.ListView):
         form = TagSearchForm(self.request.GET)
 
         if form.is_valid():
-            return queryset.filter(
-                name__icontains=form.cleaned_data["name"]
-            )
+            return queryset.filter(name__icontains=form.cleaned_data["name"])
 
         return queryset
 
@@ -79,9 +75,7 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
 
         content = self.request.GET.get("content", "")
 
-        context["search_form"] = TaskSearchForm(
-            initial={"content": content}
-        )
+        context["search_form"] = TaskSearchForm(initial={"content": content})
 
         return context
 
@@ -91,9 +85,7 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
         form = TaskSearchForm(self.request.GET)
 
         if form.is_valid():
-            return queryset.filter(
-                content__icontains=form.cleaned_data["content"]
-            )
+            return queryset.filter(content__icontains=form.cleaned_data["content"])
 
         return queryset
 
