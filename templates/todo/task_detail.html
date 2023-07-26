@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8">
+        <h1>Content: {{ task.content }}</h1>
+      </div>
+      <div class="col-md-4 text-right">
+        <a href="#" class="btn btn-secondary link-to-page">Update</a>
+        <a href="#" class="btn btn-danger link-to-page">Delete</a>
+      </div>
+    </div>
+
+    <p><strong>Is done:</strong> {{ task.is_done }}</p>
+    <p><strong>Created at:</strong> {{ task.created_datetime }} </p>
+    {% if task.deadline_datetime %}
+      <p><strong>Deadline:</strong> {{ task.deadline_datetime }}</p>
+    {% endif %}
+
+    <div class="row mt-4">
+      <div class="col-md-12">
+        {% for tag in task.tags.all %}
+          <hr>
+          <p class="text-muted"><strong>ID:</strong> {{ tag.id }} </p>
+          <p>
+            <strong>Tag:</strong>
+            {{ tag.name }}
+          </p>
+        {% empty %}
+          <p>There are no tags!</p>
+        {% endfor %}
+      </div>
+    </div>
+
+{#    <div class="row mt-4">#}
+{#      <div class="col-md-12">#}
+{#        <h3>Cooks</h3>#}
+{#        <form action="#" method="post">#}
+{#          {% csrf_token %}#}
+{#          {% if request.user in dish.cooks.all %}#}
+{#            <input type="submit" class="btn btn-danger link-to-page" value="Do not cook this dish" />#}
+{#          {% else %}#}
+{#            <input type="submit" class="btn btn-success link-to-page" value="Cook this dish" />#}
+{#          {% endif %}#}
+{#        </form>#}
+{#      </div>#}
+{#    </div>#}
+  </div>
+{% endblock %}

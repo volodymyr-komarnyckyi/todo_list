@@ -22,3 +22,16 @@ def index(request):
     }
 
     return render(request, "todo/index.html", context=context)
+
+
+class TagListView(LoginRequiredMixin, generic.ListView):
+    model = Tag
+
+
+class TaskListView(LoginRequiredMixin, generic.ListView):
+    model = Task
+
+
+class TaskDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Task
+

@@ -10,10 +10,10 @@
         <a class="nav-link" href="{% url "todo:index" %}">Home</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">All tags</a>
+        <a class="nav-link" href="{% url "todo:tag-list" %}">All tags</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">All tasks</a>
+        <a class="nav-link" href="{% url "todo:task-list" %}">All tasks</a>
       </li>
     </ul>
     <form class="form-inline my-2 my-lg-0">
