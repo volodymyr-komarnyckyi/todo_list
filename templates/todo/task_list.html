@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8">
+        <h1>Task List</h1>
+      </div>
+      <div class="col-md-4 text-right">
+        <a class="btn btn-primary" href="{% url "todo:task-create" %}">Create New Task</a>
+      </div>
+    </div>
+
+    <div class="search">
+      {% include "includes/search_form.html" %}
+    </div>
+
+    {% if task_list %}
+      <div class="cook-list-container">
+        {% for task in task_list %}
+          <div class="cook-item">
+            <div class="cook-name">{{ task.content }}</div>
+            <div class="cook-details">
+              <p><strong>Is done:</strong> {{ task.is_done }}</p>
+              <hr>
+              <p><strong>Created at:</strong> {{ task.created_datetime }}</p>
+              {% if task.deadline_datetime %}
+                <p><strong>Deadline:</strong> {{ task.deadline_datetime }}</p>
+              {% endif %}
+              <hr>
+              <p><strong>Tags:</strong></p>
+              {% for tag in task.tags.all %}
+                <p>
+                  {{ tag.name }}
+                </p>
+              {% empty %}
+                <p>There are no tags!</p>
+              {% endfor %}
+
+            </div>
+            <div class="cook-buttons">
+              <a href="{% url "todo:task-detail" pk=task.id %}" class="btn btn-cook-details">Details</a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="mt-4">There are no cooks in the kitchen.</p>
+    {% endif %}
+  </div>
+{% endblock %}

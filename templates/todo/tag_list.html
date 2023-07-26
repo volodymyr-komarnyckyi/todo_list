@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8">
+        <h1>Tag List</h1>
+      </div>
+      <div class="col-md-4 text-right">
+        <a href="{% url "todo:tag-create" %}" class="btn btn-primary">Create New Tag</a>
+      </div>
+    </div>
+
+    <div class="search">
+      {% include "includes/search_form.html" %}
+    </div>
+
+    {% if tag_list %}
+      <div class="dish-type-container">
+        {% for tag in tag_list %}
+          <div class="dish-type-item">
+            <div class="dish-type-name">{{ tag.name }}</div>
+            <div class="dish-type-list-name">
+              {% for task in tag.tasks.all %}
+                <hr>
+                <p>Tasks:</p>
+                <p><strong>Content:</strong> <a href="{% url "todo:task-detail" pk=task.id %}">{{ task.content }}</a></p>
+              {% empty %}
+                <p>There are no tasks!</p>
+              {% endfor %}
+            </div>
+            <div class="dish-type-buttons">
+              <a href="{% url "todo:tag-update" pk=tag.id %}" class="btn btn-update">Update</a>
+              <a href="{% url "todo:tag-delete" pk=tag.id %}" class="btn btn-delete">Delete</a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="mt-4">There are no tags.</p>
+    {% endif %}
+  </div>
+{% endblock %}
