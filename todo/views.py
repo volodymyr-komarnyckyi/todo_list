@@ -85,7 +85,9 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
         form = TaskSearchForm(self.request.GET)
 
         if form.is_valid():
-            return queryset.filter(content__icontains=form.cleaned_data["content"])
+            return queryset.filter(
+                content__icontains=form.cleaned_data["content"]
+            )
 
         return queryset
 
