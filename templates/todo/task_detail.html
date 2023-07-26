@@ -21,6 +21,16 @@
 
     <div class="row mt-4">
       <div class="col-md-12">
+        {% if task.is_done %}
+          <a href="{% url "todo:task-undo" pk=task.id %}" class="btn btn-primary">Undo</a>
+        {% else %}
+          <a href="{% url "todo:task-complete" pk=task.id %}" class="btn btn-success">Complete</a>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <div class="col-md-12">
         <h4>Tags:</h4>
         {% for tag in task.tags.all %}
           <hr>
@@ -35,18 +45,5 @@
       </div>
     </div>
 
-{#    <div class="row mt-4">#}
-{#      <div class="col-md-12">#}
-{#        <h3>Cooks</h3>#}
-{#        <form action="#" method="post">#}
-{#          {% csrf_token %}#}
-{#          {% if request.user in dish.cooks.all %}#}
-{#            <input type="submit" class="btn btn-danger link-to-page" value="Do not cook this dish" />#}
-{#          {% else %}#}
-{#            <input type="submit" class="btn btn-success link-to-page" value="Cook this dish" />#}
-{#          {% endif %}#}
-{#        </form>#}
-{#      </div>#}
-{#    </div>#}
   </div>
 {% endblock %}

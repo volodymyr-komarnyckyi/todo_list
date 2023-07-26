@@ -9,7 +9,10 @@ from todo.views import (
     TaskListView,
     TaskDetailView,
     TaskCreateView,
-    TaskUpdateView, TaskDeleteView,
+    TaskUpdateView,
+    TaskDeleteView,
+    complete_task,
+    undo_task,
 )
 
 urlpatterns = [
@@ -67,6 +70,18 @@ urlpatterns = [
         "tasks/<int:pk>/delete",
         TaskDeleteView.as_view(),
         name="task-delete"
+    ),
+
+    path(
+        "tasks/<int:pk>/complete/",
+        complete_task,
+        name="task-complete"
+    ),
+
+    path(
+        "tasks/<int:pk>/undo/",
+        undo_task,
+        name="task-undo"
     ),
 
 ]

@@ -1,10 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views import generic
 
-from todo.forms import TaskForm
+from todo.forms import TaskForm, TagSearchForm, TaskSearchForm
 from todo.models import Tag, Task
 
 
@@ -27,7 +27,30 @@ def index(request):
 
 class TagListView(LoginRequiredMixin, generic.ListView):
     model = Tag
-    paginate_by = 1
+    paginate_by = 2
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        name = self.request.GET.get("name", "")
+
+        context["search_form"] = TagSearchForm(
+            initial={"name": name}
+        )
+
+        return context
+
+    def get_queryset(self):
+        queryset = self.model.objects.all()
+
+        form = TagSearchForm(self.request.GET)
+
+        if form.is_valid():
+            return queryset.filter(
+                name__icontains=form.cleaned_data["name"]
+            )
+
+        return queryset
 
 
 class TagCreateView(LoginRequiredMixin, generic.CreateView):
@@ -49,7 +72,30 @@ class TagDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 class TaskListView(LoginRequiredMixin, generic.ListView):
     model = Task
-    paginate_by = 1
+    paginate_by = 2
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        content = self.request.GET.get("content", "")
+
+        context["search_form"] = TaskSearchForm(
+            initial={"content": content}
+        )
+
+        return context
+
+    def get_queryset(self):
+        queryset = self.model.objects.all()
+
+        form = TaskSearchForm(self.request.GET)
+
+        if form.is_valid():
+            return queryset.filter(
+                content__icontains=form.cleaned_data["content"]
+            )
+
+        return queryset
 
 
 class TaskDetailView(LoginRequiredMixin, generic.DetailView):
@@ -71,3 +117,19 @@ class TaskUpdateView(LoginRequiredMixin, generic.UpdateView):
 class TaskDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Task
     success_url = reverse_lazy("todo:task-list")
+
+
+@login_required
+def complete_task(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    task.is_done = True
+    task.save()
+    return redirect(reverse("todo:task-detail", args=[pk]))
+
+
+@login_required
+def undo_task(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    task.is_done = False
+    task.save()
+    return redirect(reverse("todo:task-detail", args=[pk]))
