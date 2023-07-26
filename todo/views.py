@@ -26,10 +26,18 @@ def index(request):
 
 class TagListView(LoginRequiredMixin, generic.ListView):
     model = Tag
+    paginate_by = 1
+
+
+class TagCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Tag
+    fields = "__all__"
+    success_url = reverse_lazy("todo:tag-list")
 
 
 class TaskListView(LoginRequiredMixin, generic.ListView):
     model = Task
+    paginate_by = 1
 
 
 class TaskDetailView(LoginRequiredMixin, generic.DetailView):
